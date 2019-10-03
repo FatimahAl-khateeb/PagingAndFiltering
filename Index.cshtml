@@ -1,0 +1,64 @@
+﻿@model GlobaDev.Models.StudentListVM
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Add") @* Create is the name of an action method , while Create New is a string  *@
+</p>
+
+<p>
+    @Html.ActionLink("my Layout Page", "TestLayout")
+</p>
+
+<div>
+    @using (Html.BeginForm("Index", "Student", FormMethod.Get))
+    { @*Paging (actionmethod name) Student (Controller name)*@
+    @Html.TextBox("search")
+    <input type="submit" value="Search" />
+}
+</div>
+<br />
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Students.First().StudentName) @*I can write rather all this line to give same result ( StudentName ) ,later i'll know should i write it in this way *@
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Students.First().Age)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model.Students)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.StudentName) @*modelItem is a var. (list of Student) *@
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Age)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.StudentId }) |
+                @Html.ActionLink("Details", "Details", new { id = item.StudentId }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.StudentId })
+            </td>
+        </tr>
+    }
+
+</table>
+
+<div class="pagiation">
+    Page:
+    @for (int p=1; p<= Model.TotalPages;p++)
+    {
+        <a class="@( p == Model.CurrentPage ? "current" : "")"
+           href=" @Url.Action("Index","Student",new { search= Model.Search,page = p  })"> @p
+        </a>
+    }
+
+</div>
